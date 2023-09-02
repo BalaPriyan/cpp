@@ -33,7 +33,7 @@ from .modules import (anonymous, authorize, bot_settings, cancel_mirror,
                       category_select, clone, eval, gd_count, gd_delete,
                       gd_search, leech_del, mirror_leech, rmdb, rss,
                       shell, status, torrent_search,
-                      torrent_select, users_settings, ytdlp)
+                      torrent_select, users_settings, ytdlp, broadcast, speedtest)
 
 
 async def stats(_, message, edit_mode=False):
@@ -207,20 +207,14 @@ async def start(_, message):
         msg = 'Token refreshed successfully!\n\n'
         msg += f'Validity: {get_readable_time(int(config_dict["TOKEN_TIMEOUT"]))}'
         return await sendMessage(message, msg)
-    elif config_dict['DM_MODE'] and message.chat.type != message.chat.type.SUPERGROUP:
-        start_string = 'Bot Started.\n' \
-                       'Now I will send all of your stuffs here.\n' \
-                       'Use me at: @Z_Mirror'
-    elif not config_dict['DM_MODE'] and message.chat.type != message.chat.type.SUPERGROUP:
-        start_string = 'Sorry, you cannot use me here!\n' \
-                       'Join: @Z_Mirror to use me.\n' \
-                       'Thank You'
+    elif await CustomFilters.authorized(client, message):
+        start_string = f"This bot can mirror all your links|files|torrents to Google Drive or any rclone cloud or to telegram or to ddl servers.</i><b>Type {help_command} to get a list of available commands"
+        await sendMessage(message, start_string, reply_markup, photo='IMAGES')
+    elif config_dict['BOT_PM']:
+        await sendMessage(message, "<i>Now, This bot will send all your files and links here. Start Using ...", reply_markup, photo='IMAGES')
     else:
-        tag = message.from_user.mention
-        start_string = 'Start me in DM, not in the group.\n' \
-                       f'cc: {tag}'
-    await sendMessage(message, start_string)
-
+        await sendMessage(message, '<i>You Are not authorized user! Deploy your own Mirror-Leech bot</i>', reply_markup, photo='IMAGES')
+    await DbManger().update_pm_users(message.from_user.id)
 
 async def restart(_, message):
     restart_message = await sendMessage(message, "Restarting...")
