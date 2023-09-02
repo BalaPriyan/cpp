@@ -472,9 +472,6 @@ class MirrorLeechListener:
                 msg += f'\n<code>Files           </code>: {files}'
             if link or rclonePath and config_dict['RCLONE_SERVE_URL']:
                 buttons = ButtonMaker()
-                    b_uname = bot.get_me().username
-                    botstart = f"http://t.me/{b_uname}"
-                    buttons.buildbutton("View links in PM", f"{botstart}")
                 if link:
                     if link.startswith("https://drive.google.com/") and not config_dict['DISABLE_DRIVE_LINK']:
                         buttons.ubutton("♻️ Drive Link", link)
