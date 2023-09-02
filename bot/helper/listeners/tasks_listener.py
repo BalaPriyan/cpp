@@ -405,9 +405,9 @@ class MirrorLeechListener:
         _msg = '' if rclonePath == '' else f'\n\n<code>Path            </code>: {rclonePath}'
         msg_ = '\n\n<b><i>Link has been sent in your DM.</i></b>'
         buttons = ButtonMaker()
-            b_uname = bot.get_me().username
-            botstart = f"http://t.me/{b_uname}"
-            buttons.buildbutton("View links in PM", f"{botstart}")
+        b_uname = bot.get_me().username
+        botstart = f"http://t.me/{b_uname}"
+        buttons.buildbutton("View links in PM", f"{botstart}")
         if self.isLeech:
             msg += f'\n<code>Total Files     </code>: {folders}\n'
             if mime_type != 0:
